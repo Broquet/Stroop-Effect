@@ -1,0 +1,2 @@
+# Stroop-Effect
+In this project, a classic phenomenon from experimental psychology called the Stroop Effect will be investigated. An overview of the experiment will be provided, hypothesis will be created regarding the outcome of the task. Some data collected from people who have performed the same task will be analyzed and some statistics describing the results will be computed. Finally, the results will be interpreted in terms of the hypotheses defined.
