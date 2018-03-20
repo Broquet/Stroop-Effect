@@ -1,0 +1,384 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Project Overview"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "In this project, a classic phenomenon from experimental psychology called the Stroop Effect will be investigated. An overview of the experiment will be provided, hypothesis will be created regarding the outcome of the task. Some data collected from people who have performed the same task will be analyzed and some statistics describing the results will be computed. Finally, the results will be interpreted in terms of the hypotheses defined."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Background information"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "In a Stroop task, participants are presented with a list of words, with each word displayed in a color of ink. The participant’s task is to say out loud the color of the ink in which the word is printed. The task has two conditions: a congruent words condition, and an incongruent words condition. In the congruent words condition, the words being displayed are color words whose names match the colors in which they are printed: for example RED, BLUE. In the incongruent words condition, the words displayed are color words whose names do not match the colors in which they are printed: for example PURPLE, ORANGE. In each case, we measure the time it takes to name the ink colors in equally-sized lists. Each participant will go through and record a time from each condition."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Questions"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "**Question 1**: What is our independent variable? What is our dependent variable?\n",
+    "\n",
+    "* Independent variable: Condition (congruent/incongruent)\n",
+    "* Dependent variable: Time of reaction of participants to name the colour of words"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "**Question 2**: What is an appropriate set of hypotheses for this task? What kind of statistical test do you expect to perform? Justify your choices.\n",
+    "\n",
+    "H0 refers to the null hypothesis and HA refers to the alternate hypothesis. μi refers to the population mean of  incongruent tasks and μc refers to the population mean of incongruant tasks.\n",
+    "\n",
+    "* H0: ( μi - μc = 0 ) - Time to name colours is the same for congruent and incongruent tasks\n",
+    "* HA: ( μi - μc ≠ 0 ) - Time to name colours is not the same for congruent and incongruent tasks\n",
+    "\n",
+    "These hypotheses were chosen because they define whether the Stroop Effect exists. The dependent samples t-Test is the appropriate statistical test, as the same subjects are assigned two different conditions. The different conditions are dependent because by performing the first test, participants develop their abilities and might have an unfair advantage due to the learning effect. In addition, there are no population parameters provided (so a z-test would not be appropriate in this case. The sample is composed of 24 participants that performed the test two times, one with congruent and one with incongruent words)."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "**Question 3**: Report some descriptive statistics regarding this dataset. Include at least one measure of central tendency and at least one measure of variability."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style>\n",
+       "    .dataframe thead tr:only-child th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: left;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>Congruent</th>\n",
+       "      <th>Incongruent</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>12.08</td>\n",
+       "      <td>19.28</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>16.79</td>\n",
+       "      <td>18.74</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>9.56</td>\n",
+       "      <td>21.21</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>8.63</td>\n",
+       "      <td>15.69</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>14.67</td>\n",
+       "      <td>22.80</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "   Congruent  Incongruent\n",
+       "0      12.08        19.28\n",
+       "1      16.79        18.74\n",
+       "2       9.56        21.21\n",
+       "3       8.63        15.69\n",
+       "4      14.67        22.80"
+      ]
+     },
+     "execution_count": 2,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "import pandas as pd\n",
+    "import numpy as np\n",
+    "import seaborn as sns\n",
+    "import matplotlib.pyplot as plt\n",
+    "import pdb\n",
+    "\n",
+    "Datacolor = pd.read_csv('Desktop/stroopdata.csv')\n",
+    "Datacolor.head().round(2)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style>\n",
+       "    .dataframe thead tr:only-child th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: left;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>Congruent</th>\n",
+       "      <th>Incongruent</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>count</th>\n",
+       "      <td>24.00</td>\n",
+       "      <td>24.00</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>mean</th>\n",
+       "      <td>14.05</td>\n",
+       "      <td>22.02</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>std</th>\n",
+       "      <td>3.56</td>\n",
+       "      <td>4.80</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>min</th>\n",
+       "      <td>8.63</td>\n",
+       "      <td>15.69</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>25%</th>\n",
+       "      <td>11.90</td>\n",
+       "      <td>18.72</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>50%</th>\n",
+       "      <td>14.36</td>\n",
+       "      <td>21.02</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>75%</th>\n",
+       "      <td>16.20</td>\n",
+       "      <td>24.05</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>max</th>\n",
+       "      <td>22.33</td>\n",
+       "      <td>35.26</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "       Congruent  Incongruent\n",
+       "count      24.00        24.00\n",
+       "mean       14.05        22.02\n",
+       "std         3.56         4.80\n",
+       "min         8.63        15.69\n",
+       "25%        11.90        18.72\n",
+       "50%        14.36        21.02\n",
+       "75%        16.20        24.05\n",
+       "max        22.33        35.26"
+      ]
+     },
+     "execution_count": 3,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "Datacolor.describe().round(2)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "**Question 4**: Provide one visualization that show the distribution of the sample data. Write one or two sentences noting what you observe about the plot or plots."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {
+    "scrolled": false
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Populating the interactive namespace from numpy and matplotlib\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "<matplotlib.text.Text at 0x115591550>"
+      ]
+     },
+     "execution_count": 12,
+     "metadata": {},
+     "output_type": "execute_result"
+    },
+    {
+     "data": {
+      "image/png": "iVBORw0KGgoAAAANSUhEUgAAAX0AAAEWCAYAAACKSkfIAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz\nAAALEgAACxIB0t1+/AAAIABJREFUeJzt3XecFdX5x/HPwi4ouCAqdgQbj4qKior+iEoQEzu2aGIB\nKwjW2GIBWzTRKBpBBQUN2BKN2KLBElGDqBgsKJYHxViwBRUUpS67vz/OWbwse8uue+/u3fm+Xy9e\n7J2ZZ86Zufc+c+bM3DMlVVVViIhIMrRo7AqIiEjhKOmLiCSIkr6ISIIo6YuIJIiSvohIgijpi4gk\nSGljV6A5MLMuwCzgzTipBbAUuMHd74jLXA68X/06zXouBqa7+8O1zFseb2ZVQEd3/6oOddwJOMHd\nTzazHYHz3f2wXOPrw8xaAg8AWwIj3P3GGvM3AK4EegCVwCLgD7VtfzHI9P41wLrXAua4e0kt88YB\nM9z92oYutykyszHAaHd/pcb03sBEwOOklsD3wOXuPrG+621ulPQbzkJ33676hZl1Bp42sx/cfYK7\nX5zDOvoAb9c2I8f4TLoBG8Z1TQPymvCjDYBfAm3dfVnqDDPrCLwADAWOc/cqM+sOPGVmC9z9qQLU\nr6Glff+kQe0F3JJm3qwa38PuwBNm1s/dp/6E9TYbSvp54u4fxZbfucCE1NaYmV0GHAwsAb4GjgUO\nAXYErjGzZUA/YA1gU+BRYB1WbM1dGVvvLYCh7v6omR0LHObu+wNUvwYGA5cD7c3sL8B44EZ339rM\n2gM3AdsBVYSW0oXuXmFmi4CrCF+G9QlnLn+uua1mthtwDdAmbtNQYArwOFAGvGJmh7r7rJSwIcDz\n7n5nyj6bbmaHAvPSrdfdH4/bdTDh7GDzOK+/u88ws82A2+O++xwoAe4CngUmA+8AXYABwFPuvlos\nq0vcv9WvT4h1bBHfo1Pd/d34Pn4HbAN0At4Ffh3Xt/z9c/cHU/ZPC+B6YBegPNbpRHefkm597v69\nmR1COBNaAPyn5n6vjZk9C7wI9AI2its8wN0rzWx/4Iq4TT8AJ8d9fhBwCaFl/B1wlru/bGaXxn21\nHtAZmAMc4e6fmdnOwM1AK8JZbmfgrFiNG+L62wLnAcPdfetYv97Ez158fRFwaKzTh8CQuP5atwP4\nPeGzeLeZ9c+WyOP2jQB+C/zazHYB/gS0jtv1lLufYGZXpq6X8B6ttFwu70FTpz79/JpO+DIvZ2ad\ngDOBndx9R+BJoKe73wRMA85NSRht3L2bu/+ulnV/4O47AEcD42PLuVbu/glwMTDZ3Y+rMXsEIalt\nQ0ha3YFz4rzWwFfu3otw8LjKzFapsT1rAvcDZ7j7toQv5l3AWsC+xDOgGgmfWNaUWuo62d3fTLde\nM9s4LroHcFpMHlMIB1eAO4G/xumnA7umrH5D4Pfu3pVwQKiVme0Ry9vN3bcnfPkfSFmkB7A3odtq\nfeBXad6/aj3jcru6+1aEg+75mdZnZusQDl6HunsP4KN09a3FpkBvwnvaB9gjru8u4Ni4P68hvJ9b\nAKNjOdsSPicPm1m7uK7d4vZtAcwFBplZKTABGBZjRhAaDdW2Bn7j7t2BxekqGZPrNsDOsXX+T2Bs\npu1w94uAz4Cjcmi5V0v9Hp4BXOzuPYGtgAPNrEct6611uRzLa9KU9POritBKS/Up4UP4qpldC7zu\n7g+liX8+w7pHA7j7DEKXwq4Zls1kH0LLq8rdF8f17pMyv7p/+lXCQaBtjfiehGsNU2N93iIk4d5Z\nyq0k8+cv23pfcffZKXVbw8w6ADsTE4e7vwM8nbLOCkLrMZv9gM2AF8zsdULSX8PM1ojzH3f3xe6+\nlHAdZ4006yHW40XC2c+g+J4fBqyWskht6/sZ8Ka7V3cX1aXb4R/uXunu84H34/p6Ec5kXo91esDd\n9yEk06fd/YM4fRLwP8KBCOBZd/8u/v1aXNc2cdmJ8f9ngBkp5X/i7rkcpPYnnP1Mi/v5NMCybEd9\npH4PBwCrm9mFhDOVNqz4XlDH5YqOkn5+7cSPF3cBcPdKQiv1WEIL+3ozuyFN/PcZ1p3aR15CuHBc\nFf+u1iqHOtb8DLQgdMlUWwjg7tWDNNW8kFjbZ6jmOmrzEuELvwIzG2RmZ+Ww3oUp06u3u3qfpNYx\ndT8tdveKGjHVUvdVS+DOeIayHbAD4cxkboay0zKz/YDH4suHCQfW1Jja1ldzvRXkrrb1VcS/q+tU\nYmbbUr/9XMHK25y6n1M/t9n289Up+3lHwsEp03bUR+r3cDLhDPRdQpfn7DTrzXW5oqOknydm1hUY\nBgyvMb07oVX0jrv/kdDX2z3OriB7sqx2bFzfDoR+7amEPtetzWyVeAp+QMry6db9BHBKTAKtgYFA\nXS6ivhSqYTvH+nQDdif0oWdyC9DbzI4ys5IY24PwBXuzPuuNLdIpwHExZmNgT1KSXYp5QCsz2yq+\nPjhl3pPAb8xsvfj6ZFY8Y0gn3T7ei9BqHUXomz+IkPAymQx0i58XiO/3TzAV2DLuRwjXjO4CJgG/\nMLNNAMysD+HaQqauk3eAxWa2d4zZmdD6r20/zwE2MrO14/t8UMq8J4ATU7qSLid0z2WT8/ck1m0w\ncEM8E9wR+J27P0C40WAzfnwvKoCyHJYrakr6DWdVM3s9/nsVGAdc4O6PpS7k7tOB+wintNOA4wkX\nmQD+AVxrZgNyKG8TM3uN0JXxa3f/hpCsniO0Tiaz4lnGi8AWZlazv/l0YO247JuE292uzHGb8XDb\n6K+AkWb2JnAP4W6cmVniviF01RwKzIixNxFuK32qvusF+gOHm9n0uL7/snIXG+7+LeEi40Qz+w8p\nCcvdnwCuJtxJ9AZwJHBIytlOOunev9GEfvU3CO/DLGDjeIG3Vu4+J5Z7d/w8bZxu2Vy4+5fAUYTr\nP68TLrr+OnYfDQEeMLMZhAv3B8T9k25dFYT37dL4GTwb+ILa9/PbhAP8NMKBPPVayljCTQovmdlb\nwLbkdnB7CLjXzH5Ry7xNa3wPrwaOdPfp7j4X+COha3UacAGhkbBZ6noJZwaZlitqJRpaWZqTeDfI\nhHinTXvgDWCflL5xaQBmdg1wrbt/GW9OmA5s4u7zGrlqkoVu2ZTmZiahFVhJ+HxfpYSfFx8Rfoey\nlB9vQVXCLwJq6YuIJIj69EVEEkRJX0QkQZT0RUQSpElfyJ0zZ37aCw4dOrRh7tyV7hDLSnGKU1wy\n4oqhjvmK69ixPO0PyYq2pV9aWr/fSShOcYpLRlwx1LEx4oo26YuISN0p6YuIJIiSvohIgijpi4gk\niJK+iEiCKOmLiCSIkr6ISILk7cdZZtYSGEN4/FkV4UEUZYTxs9+Li41y93t/SjnHXzXpp4Sv5Pbz\n++S03AcfzGLUqBEsWrSIhQsXsuuuvTj++IGUlDS9h+tMmHAvhx56RGNXQ0SagHz+IvcAAHfvZWa9\nCQ/m+AdwnbsPzxTY1M2fP59LL72QK6+8hk6dNmLZsmUMG3Y+Dz88gYMOOqyxq7eS8eNvV9Jv5g6/\nd/Dyv2/q86dGrIk0dXlL+u7+kJk9Gl92JjyergfhEXj9CK39M+NDj4vK888/xw477ESnThsB0LJl\nS4YOvYyysjJGjryeN954HYC99tqbU04ZyJVXXkpZWRlffPE5X3/9FRdeeClmW/Doow8xYcJ9tGvX\nntLSMvbccy8AHnvsEVq2LKF//xO5/PJhPPLIEwBccskF9Ot3KNtuux3XXPMHZs/+hMrKSk46aTA7\n7LAjAwb8ml133YUZM8Lw8VdddR0TJtzLd999y7XXXsU555zfCHtLRJqSvI694+4VZjae8PzRwwjP\nmhzr7q/EJxxdApyTLr5DhzYZf2rcsWN5A9c48zqr5y1c+B1du25SY9lynnnmGb755n88+OAEKioq\nOPLII+nbdw9WWaWMLl26cM01V3Hffffx5JP/YKutNuVvf7uLhx56iFatWtG/f3/Ky1cBYM01OzBq\n1CgArrji4uXltG5dxuqrt+GZZyay3nprc9111zB37lyOPvpoHnvsMRYtWsh+++3HsGHDOPvss3n7\n7Vc555wzefDBv3P11dmfgFjf/am4phFX3/hi2b76xBVDHQsdl/cB19x9gJn9jvCg5f9z90/jrAeB\nkZliMw1C1LFjOXPmNPxJQrp1ppa32mprMHPmuyss+9lnn/Lyy6+yxRZb89VX3wPQtetWzJo1i0WL\nlrL++l2YM2c+q67anu+++4Hp09+lU6fOfP99BVCBWTfmz18EwLrrbrC8LpWVVcvLWbRoKfPmLWD6\n9Ld4443XmDbtVQAWL17Ce+99wrJllWy11VbMmTOf9u3X5Kuvvl1pHenUd38qrmnEpapLfLFsX33i\niqGO+YrLdDDI2907ZnaMmV0QXy4AKgkPX945TtsTeCVf5edTr14/Y+rUF/j009kAVFRUMHLk9ZSX\nt1vetVNRUcGMGW/QuXNngJUu8G64YSc++uhDFi9eRGVlJe+889byeSUlP74tFRUVLFiwgKVLl/Lf\n/84CoHPnLvTt+0tuvPFWhg8fwc9/3pd27drVWg6Ano4mItXy2dJ/APiLmf2bcNfOmcAnwMj4XM0v\ngIF5LD9v2rZdjYsuuoyrr76CyspKFixYQK9eu3HYYUfw5ZdfMGjQcSxdupQ+ffrSrVu3Wtex+uqr\nc9RRAxgy5CTatWvH4sWLKS0tpaKiYoXlDj/8NwwadCzrr78B6667HgD9+h3C1VdfwamnDuSHH77n\n4IN/RYsW6Y/fXbpszOWXD+Pii3/fcDtBRIpSk35Gbqbx9JvSqVR94ioqKrj77vEMGHACVVVVnHLK\nSQwcOITtttuhSdVTccURd8qk85b/XZe7d4pl++oTl7pPIPf9Ugzbli0u03j6TfohKs1ZaWkpixYt\n4vjjj6K0tIytttqa7t23b+xqiUgzp6TfiAYNOoVBg05p7GqISIJoGAYRkQRR0hcRSRAlfRGRBFHS\nFxFJkKK/kFvztqyfKpfbuj7//DMuueRCbr11XIOWXWgPP/wA++13IKWlRf8xEJEcqaWfYHfe+ReW\nLVvW2NUQkQJSE+8nOPXUgWy+ufHBB7NYsOB7fv/7q1l33fUYN24skyc/x7JlyzjmmKPYc8/9+Otf\n7+Lpp5+kZcuWdO++PUOGnM5tt93C559/xty5c/nyy8857bSz6NlzV6ZMmcz48WNo3XpVysvbsemm\nm7H99j0YNWokZWVlHHjgwYwdO5q7776f1q1bM2rUSDp37sK++x7A8OHDefHFqVRWVnLEEUfRp0/f\nWus5bdpUvvnmay699EL++MeiHulaROpALf2faMstu3HDDTez4449eeqpJ5g5812mTn2BW28dx5gx\n4/nwww+ZNet9Jk16itGjb2f06NuZPfsTpkyZDEBZWSuGDx/BGWeczb333sOyZcv485+vZcyYMYwc\neQutW7deXtaSJUu4+eax7L33frXW5cUXpzB79mxGjbqNESNGc8cdtzN//vxa67n//gexxhprcuml\nf8j/ThKRJkNJ/yfq2tUAWGeddViyZDEff/wRW27ZjZYtW1JWVsb555/PRx99SLdu21BaWkpJSQnd\nu2+3fPC06vi1116XJUsWM2/eXNq2bctaa60FQPfu2y0va6ONOtdah+qhND744H3eeustTj11IGef\nfRoVFRV88cVntdZTRJJJSf8nqjmqZefOXZg506msrKSiooLjjjuOTp024u23Z1BRUUFVVRWvv/4a\nnTpVj7654vo6dFiDBQt+4JtvvgHgrbdmLJ/XosWPC7dq1Yqvv/6Kqqoq3n9/5vKye/bsyY033sqI\nEaPp06cvG2ywYa31DNNaaAROkYRRn34D23xzo2fPXRk8+AQqKyvp3/9oNt+8K3369GXw4DC42rbb\ndmf33XsvT9apWrRowW9/ex4nnXQSrVu3oaqqkg037LTSckce2Z9zzz2Dddddn/LyMHZ2r1678+67\nbzJkyIksXLiA3Xf/OW3atE1b1+7dt+Occ05n5MhbGm4HiEiTplE2m2DcnXf+hVNPPZlvv13M5ZcP\nY6ederLPPvs3uXoqrunEaZTNlWmUzdqppd8EtWnThsMPP5zS0jLWXXd99tzzF41dJRFpJpT0m6BD\n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\n",
+      "text/plain": [
+       "<matplotlib.figure.Figure at 0x115cb16d0>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "%pylab inline\n",
+    "import matplotlib.pyplot as plt\n",
+    "Datacolor.plot.bar()\n",
+    "sns.plt.title('Distribution of Congruent and Incongruent Data')\n",
+    "plt.ylabel(\"Time\")\n",
+    "plt.xlabel(\"Frequency\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The grapg above shows that the incongruent tasks takes more time than the congruent tasks. There are two outliers for incongruent words at around 35 seconds."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "**Question 5**: Now, perform the statistical test and report your results. What is your confidence level and your critical statistic value? Do you reject the null hypothesis or fail to reject it? Come to a conclusion in terms of the experiment task. Did the results match up with your expectations?"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "collapsed": true
+   },
+   "source": [
+    "Confidence level = 99%\n",
+    "\n",
+    "Alpha = .01\n",
+    "\n",
+    "t-critical two-tailed = +-2.807\n",
+    "\n",
+    "t-statistic = -8.021\n",
+    "\n",
+    "r² = .737\n",
+    "\n",
+    "The t-statistic (-8.021) is lower than the negative t-critical (-2.807), therefore the null hypothesis is rejected.\n",
+    "\n",
+    "This result means that the difference between the congruent and incongruent samples is statistically significant. According to the r², 73.70% of this difference is due to the words condition (congruent or incongruent). The results match my expectations."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "**Question 6**: Optional: What do you think is responsible for the effects observed? Can you think of an alternative or similar task that would result in a similar effect? Some research about the problem will be helpful for thinking about these two questions!\n",
+    "\n",
+    "\n",
+    "The brain associates the shape of the word and the colour. When there is a mismatch, additional time is necessary for the prefrontal cortex to process information and interpret them. A similar effect would likely be observed if the participants were shown words of the correct colour but the wrong text."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## References"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "* https://docs.google.com/document/d/1-OkpZLjG_kX9J6LIQ5IltsqMzVWjh36QpnP2RYpVdPU/pub?embedded=True\n",
+    "* https://drive.google.com/file/d/0B9Yf01UaIbUgQXpYb2NhZ29yX1U/view\n",
+    "* https://en.wikipedia.org/wiki/Stroop_effect"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 2",
+   "language": "python",
+   "name": "python2"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 2
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython2",
+   "version": "2.7.13"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
